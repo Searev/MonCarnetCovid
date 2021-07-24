@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_24">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_24">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_qr_code_scanner_24"
+            android:importantForAccessibility="no"
+            android:layout_gravity="center"
+            app:tint="@color/blue_700" />
+
+        <TextView
+            android:id="@+id/certificatType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Certificat de vaccination"
+            android:layout_marginTop="@dimen/margin_24"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceHeadline6" />
+
+        <TextView
+            android:id="@+id/certificatDetenteur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textAlignment="center"
+            android:layout_marginTop="@dimen/margin_12"
+            android:visibility="gone"
+            tools:text="Jean Dupont" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/afficherCodeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_24"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:text="@string/afficher_code" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.ListeCertificatsFragment">
+
+    <data>
+        <variable
+            name="vm"
+            type="eu.huberisation.moncarnetcovid.viewmodel.ListeCertificatsViewModel" />
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:src="@drawable/empty"
+            android:layout_gravity="center"
+            android:layout_margin="24dp"
+            android:visibility="@{vm.codePresent ? View.GONE : View.VISIBLE}"
+            android:importantForAccessibility="no"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:visibility="@{vm.codePresent ? View.GONE : View.VISIBLE}"
+            android:text="@string/aucun_certificat"
+            android:textAppearance="?attr/textAppearanceSubtitle1"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listeCertificats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:padding="12dp"
+            android:clipToPadding="false"
+            tools:listitem="@layout/certificat_card_view"/>
+
+    </LinearLayout>
+</layout>

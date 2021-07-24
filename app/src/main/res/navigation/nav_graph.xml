@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/listeCertificatsFragment">
+    <fragment
+        android:id="@+id/listeCertificatsFragment"
+        android:name="eu.huberisation.moncarnetcovid.ui.ListeCertificatsFragment"
+        android:label="Mon Carnet Covid"
+        tools:layout="@layout/liste_certificats_fragment" >
+        <action
+            android:id="@+id/action_listeCertificatsFragment_to_afficherCodeFragment"
+            app:destination="@id/afficherCodeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/afficherCodeFragment"
+        android:name="eu.huberisation.moncarnetcovid.ui.AfficherCodeFragment"
+        android:label="Détail d'un certificat"
+        tools:layout="@layout/detail_certificat_fragment" >
+        <argument android:name="idCertificat"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_afficherCodeFragment_to_listeCertificatsFragment"
+            app:destination="@id/listeCertificatsFragment" />
+    </fragment>
+</navigation>

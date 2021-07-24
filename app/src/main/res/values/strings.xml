@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Mon Carnet Covid</string>
+    <string name="explication_permission_titre">
+        Demande d\'accès à la caméra
+    </string>
+    <string name="demander_camera">
+        Accès à la caméra
+    </string>
+    <string name="explication_permission">
+        Afin de scanner le QR Code contenant le certificat, Mon Carnet Covid doit pouvoir accéder
+        à votre caméra
+    </string>
+    <string name="ok">C\'est noté</string>
+    <string name="annuler">Annuler</string>
+
+    <string name="aucun_certificat">Vous n\'avez aucun certificat sur votre application</string>
+    <string name="afficher_code">Afficher le code</string>
+    <string name="precedent">Revenir à la liste</string>
+    <string name="certificat_test">Certificat de test</string>
+    <string name="attestation_vaccination">Attestation de vaccination</string>
+    <string name="effacer_certificat">Supprimer le certificat</string>
+    <string name="effacer_certificat_titre">Suppression d\'un certificat</string>
+    <string name="effacer_certificat_confirmation">
+        Voulez-vous vraiment effacer ce certificat de l\'application ?
+    </string>
+
+    <string name="ajouter_qr_code">Ajouter un QR Code</string>
+    <string name="scan_instruction">Scannez le QR Code de votre certificat</string>
+    <string name="scan_reussi">Code correctement scanné</string>
+    <string name="scan_echec">Le code scanné ne contient pas de certificat valide</string>
+
+    <!-- Ressources utiles pour la navigation -->
+    <string name="first_fragment_label">Mon pass sanitaire</string>
+    <string name="second_fragment_label">Partage d\'un certificat</string>
+
+</resources>

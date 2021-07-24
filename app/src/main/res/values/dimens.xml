@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_24">24dp</dimen>
+    <dimen name="qr_code_fullscreen_size">240dp</dimen>
+</resources>
