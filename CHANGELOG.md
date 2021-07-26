@@ -8,6 +8,7 @@ et ce projet adhère aux principes du [Versioning Sémantique](https://semver.or
 
 ## [1.0.0] - 26/07/2021
 ### Ajoutés
+- Précise le fonctionnement de l'application à son premier lancement
 - Scanner une attestation de vaccination française destinée à TousAntiCovid
 - Scanner un certificat de test au format européen
 - Affiche le nom et prénom des attestations de vaccination

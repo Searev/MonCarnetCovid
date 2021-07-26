@@ -18,7 +18,9 @@ import eu.huberisation.moncarnetcovid.MonCarnetCovidApplication
 import eu.huberisation.moncarnetcovid.R
 import eu.huberisation.moncarnetcovid.databinding.ActivityMainBinding
 import eu.huberisation.moncarnetcovid.exceptions.CertificatInvalideException
+import eu.huberisation.moncarnetcovid.helper.SharedPrefsHelper
 import eu.huberisation.moncarnetcovid.model.TypeCertificat
+import eu.huberisation.moncarnetcovid.ui.onboarding.OnboardingActivity
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -37,16 +39,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+        if (!SharedPrefsHelper.isOnboardingDone(this)) {
+            val intent = Intent(this, OnboardingActivity::class.java)
+            startActivity(intent)
+        } else {
+            binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            setSupportActionBar(binding.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+            val navController = findNavController(R.id.nav_host_fragment_content_main)
+            appBarConfiguration = AppBarConfiguration(navController.graph)
+            setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener {
-            handlePermission()
+            binding.fab.setOnClickListener {
+                handlePermission()
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!SharedPrefsHelper.isOnboardingDone(this)) {
+            finish()
         }
     }
 
@@ -62,12 +76,6 @@ class MainActivity : AppCompatActivity() {
             val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
             if (result.contents.isNotBlank()) {
                 saveCode(result.contents)
-
-                Toast.makeText(
-                    this,
-                    R.string.scan_reussi,
-                    Toast.LENGTH_LONG
-                ).show()
             }
         }
     }
@@ -98,6 +106,12 @@ class MainActivity : AppCompatActivity() {
                         infos.second
                     )
             }
+
+            Toast.makeText(
+                this,
+                R.string.scan_reussi,
+                Toast.LENGTH_LONG
+            ).show()
         } catch (e: CertificatInvalideException) {
             Toast.makeText(
                 this,
@@ -149,4 +163,5 @@ class MainActivity : AppCompatActivity() {
             .create()
             .show()
     }
+
 }

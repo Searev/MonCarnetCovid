@@ -7,12 +7,38 @@
         Accès à la caméra
     </string>
     <string name="explication_permission">
-        Afin de scanner le QR Code contenant le certificat, Mon Carnet Covid doit pouvoir accéder
-        à votre caméra
+        Afin de scanner le QR Code contenant le certificat, Mon Carnet Covid doit pouvoir accéder à votre caméra
     </string>
     <string name="ok">C\'est noté</string>
     <string name="annuler">Annuler</string>
 
+    <!-- Onboarding -->
+    <string name="onboarding_bienvenue_titre">Bienvenue dans Mon Carnet Covid</string>
+    <string name="onboarding_bienvenue_description">
+        Cette application facilite la gestion de votre passe sanitaire.
+        \n\n
+        Libre, son <a href="https://github.com/Searev/MonCarnetCovid">code source est ouvert</a> si vous souhaitez en comprendre le fonctionnement, ou l’améliorer.
+    </string>
+    <string name="onboarding_bienvenue_btn">Commencer</string>
+    <string name="onboarding_fonctionnement_titre">Numérisez votre passe sanitaire</string>
+    <string name="onboarding_fonctionnement_description">
+        Scannez vos certificats de test RT-PCR, antigéniques, ou votre attestation de vaccination pour les présenter facilement lors d’un contrôle.
+    </string>
+    <string name="onboarding_fonctionnement_btn">Suivant</string>
+    <string name="onboarding_privacy_titre">Informations traitées par l’application</string>
+    <string name="onboarding_privacy_description">
+        Afin de numériser votre pass sanitaire et de le présenter lors d’un contrôle, Mon Carnet
+        Covid devra accéder à certaines informations vous concernant :
+        \n\n
+        - Données d’état civil : nom, prénom\n
+        - Données de santé : résultat de test, type de vaccin, nombre d’injection\n
+        \n\n
+        Ces informations resteront privées, et stockées uniquement sur votre téléphone. Vous
+        pourrez les supprimer à tout moment.
+    </string>
+    <string name="onboarding_privacy_btn">J\’accepte ce traitement</string>
+
+    <!-- Gestion des certificats -->
     <string name="aucun_certificat">Vous n\'avez aucun certificat sur votre application</string>
     <string name="afficher_code">Afficher le code</string>
     <string name="precedent">Revenir à la liste</string>
@@ -26,7 +52,7 @@
 
     <string name="ajouter_qr_code">Ajouter un QR Code</string>
     <string name="scan_instruction">Scannez le QR Code de votre certificat</string>
-    <string name="scan_reussi">Code correctement scanné</string>
+    <string name="scan_reussi">Certificat ajouté</string>
     <string name="scan_echec">Le code scanné ne contient pas de certificat valide</string>
 
     <!-- Ressources utiles pour la navigation -->

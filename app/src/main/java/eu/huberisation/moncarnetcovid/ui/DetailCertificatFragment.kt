@@ -16,9 +16,7 @@ import eu.huberisation.moncarnetcovid.R
 import eu.huberisation.moncarnetcovid.databinding.DetailCertificatFragmentBinding
 import kotlinx.coroutines.launch
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
+
 class AfficherCodeFragment : Fragment() {
 
     private lateinit var binding: DetailCertificatFragmentBinding
@@ -34,27 +32,23 @@ class AfficherCodeFragment : Fragment() {
     ): View {
         binding = DetailCertificatFragmentBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
-            val action = AfficherCodeFragmentDirections.actionAfficherCodeFragmentToListeCertificatsFragment()
-            findNavController().navigate(action)
+        binding.detailCertificatBackBtn.setOnClickListener {
+            findNavController().popBackStack()
         }
 
         lifecycleScope.launch {
             val certificat = (requireActivity().application as MonCarnetCovidApplication)
                 .certificatRepository
-                .recupererCertificat(
-                    args.idCertificat
-                )
+                .recupererCertificat(args.idCertificat)
 
             binding.barcodeImageView.setImageBitmap(
                 barcodeEncoder.encodeBitmap(
-                    certificat.contenu,
+                    certificat.code,
                     certificat.getBarcodeFormat(),
                     qrCodeSize,
                     qrCodeSize
@@ -70,6 +64,11 @@ class AfficherCodeFragment : Fragment() {
         }
     }
 
+    /**
+     * Gestion de la luminosité pour cet écran.
+     * Lorsque ce fragment apparaît, forcer la luminosité à passer au maximum.
+     * Lorsqu'il disparait, faire en sorte que les paramètres par défaut s'appliquent à nouveau.
+     */
     override fun onResume() {
         super.onResume()
         activity?.let { activity ->

@@ -1,35 +1,19 @@
-package eu.huberisation.moncarnetcovid.model
+package eu.huberisation.moncarnetcovid.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.google.zxing.BarcodeFormat
 import eu.huberisation.moncarnetcovid.data.Converters
+import eu.huberisation.moncarnetcovid.entities.TypeCertificat
 
 @Entity
 @TypeConverters(Converters::class)
 data class Certificat (
-    val type: TypeCertificat,
-    val contenu: String,
-    val detenteur: String?,
-    val expiration: String?,
+    val code: String,
     @PrimaryKey(autoGenerate = true) val id: Long? = null,
 ) {
-    fun getBarcodeFormat(): BarcodeFormat {
-        return when (type) {
-            TypeCertificat.SANITAIRE -> BarcodeFormat.QR_CODE
-            TypeCertificat.VACCINATION -> BarcodeFormat.DATA_MATRIX
-        }
-    }
-
     companion object {
-        fun fromCode(code: String, type: TypeCertificat): Certificat {
-            return when (type) {
-                TypeCertificat.VACCINATION -> decodeCertificatTestEu(code)
-                TypeCertificat.SANITAIRE -> decodeAttestationVaccinationFr(code)
-            }
-        }
-
+        /*
         private fun decodeCertificatTestEu(code: String): Certificat {
             val codeSansEnTete = code.substring(26)
             val nom = codeSansEnTete.substringAfter("L0").substringBefore("L1")
@@ -44,11 +28,11 @@ data class Certificat (
 
         private fun decodeAttestationVaccinationFr(code: String): Certificat {
             return Certificat(
-                TypeCertificat.SANITAIRE,
+                TypeCertificat.TEST,
                 code,
                 null,
                 null
             )
-        }
+        }*/
     }
 }
