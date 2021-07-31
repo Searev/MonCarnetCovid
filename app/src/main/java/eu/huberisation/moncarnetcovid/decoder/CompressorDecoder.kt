@@ -2,7 +2,7 @@ package eu.huberisation.moncarnetcovid.decoder
 
 import java.util.zip.InflaterInputStream
 
-object CompressorService {
+object CompressorDecoder {
     fun decode(input: ByteArray): ByteArray {
         if (input.size >= 2 && input[0] == 0x78.toByte()) { // ZLIB magic headers
             if (input[1] == 0x01.toByte() || // Level 1

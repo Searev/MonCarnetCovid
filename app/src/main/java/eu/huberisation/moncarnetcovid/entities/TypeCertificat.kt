@@ -1,6 +1,7 @@
-package eu.huberisation.moncarnetcovid.model
+package eu.huberisation.moncarnetcovid.entities
 
 enum class TypeCertificat {
-    SANITAIRE,
-    VACCINATION
+    TEST,
+    VACCINATION,
+    RETABLISSEMENT
 }

@@ -4,23 +4,29 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.zxing.integration.android.IntentIntegrator
 import eu.huberisation.moncarnetcovid.MonCarnetCovidApplication
 import eu.huberisation.moncarnetcovid.R
 import eu.huberisation.moncarnetcovid.databinding.ActivityMainBinding
+import eu.huberisation.moncarnetcovid.entities.Certificat
+import eu.huberisation.moncarnetcovid.entities.CertificatEuropeen
+import eu.huberisation.moncarnetcovid.entities.CertificatFactory
 import eu.huberisation.moncarnetcovid.exceptions.CertificatInvalideException
 import eu.huberisation.moncarnetcovid.helper.SharedPrefsHelper
-import eu.huberisation.moncarnetcovid.model.TypeCertificat
 import eu.huberisation.moncarnetcovid.ui.onboarding.OnboardingActivity
+import eu.huberisation.moncarnetcovid.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -28,12 +34,12 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val TOUS_ANTI_COVID_WALLET = "https://bonjour.tousanticovid.gouv.fr/app/wallet?v="
         const val TOUS_ANTI_COVID_WALLETDCC = "https://bonjour.tousanticovid.gouv.fr/app/walletdcc#"
-        const val PASS_SANITAIRE_EUROPEEN = "HC1:"
         const val REQUEST_PERMISSION_CODE = 1
     }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainActivityViewModel by viewModels()
     private val permission = Manifest.permission.CAMERA
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,12 +50,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         } else {
             binding = ActivityMainBinding.inflate(layoutInflater)
-            setContentView(binding.root)
-            setSupportActionBar(binding.toolbar)
 
-            val navController = findNavController(R.id.nav_host_fragment_content_main)
-            appBarConfiguration = AppBarConfiguration(navController.graph)
-            setupActionBarWithNavController(navController, appBarConfiguration)
+            setContentView(binding.root)
 
             binding.fab.setOnClickListener {
                 handlePermission()
@@ -64,6 +66,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.showFabBtn.observe(this) {
+            if (it) {
+                binding.fab.show()
+            } else {
+                binding.fab.hide()
+            }
+        }
+    }
+
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
@@ -75,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == -1) {
             val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
             if (result.contents.isNotBlank()) {
-                saveCode(result.contents)
+                sauvegarderCode(result.contents)
             }
         }
     }
@@ -95,16 +109,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveCode(code: String) {
+    private fun sauvegarderCode(code: String) {
         try {
-            val infos = handleCode(code)
+            val certificat = handleCode(code)
             lifecycleScope.launch {
                 (application as MonCarnetCovidApplication)
                     .certificatRepository
-                    .creerCertificat(
-                        infos.first,
-                        infos.second
-                    )
+                    .creerCertificat(certificat)
             }
 
             Toast.makeText(
@@ -121,25 +132,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleCode(code: String): Pair<TypeCertificat, String> {
-        return when {
-            code.startsWith(TOUS_ANTI_COVID_WALLET) -> {
-                Pair(TypeCertificat.VACCINATION, Uri.decode(code.substring(TOUS_ANTI_COVID_WALLET.length)))
-            }
-            code.startsWith(TOUS_ANTI_COVID_WALLETDCC) -> {
-                Pair(TypeCertificat.SANITAIRE, Uri.decode(code.substring(TOUS_ANTI_COVID_WALLETDCC.length)))
-            }
-            code.startsWith(PASS_SANITAIRE_EUROPEEN) -> Pair(TypeCertificat.SANITAIRE, code)
+    private fun handleCode(code: String): Certificat {
+        val parsedCode = when {
+            code.startsWith(TOUS_ANTI_COVID_WALLET) -> Uri.decode(code.substring(TOUS_ANTI_COVID_WALLET.length))
+            code.startsWith(TOUS_ANTI_COVID_WALLETDCC) -> Uri.decode(code.substring(TOUS_ANTI_COVID_WALLETDCC.length))
+            code.startsWith(CertificatEuropeen.PREFIX_CERTIFICAT) -> code
             else -> throw CertificatInvalideException()
         }
+        return CertificatFactory.creerCertificatDepuisCode(parsedCode)
     }
 
     private fun handlePermission() {
         when {
-            checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED -> initialiserScan()
-            shouldShowRequestPermissionRationale(permission) -> expliquerPermissionCamera()
-            else -> requestPermissions(arrayOf(permission), REQUEST_PERMISSION_CODE)
+            ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED -> initialiserScan()
+            devraitAfficherExplicationPermission() -> expliquerPermissionCamera()
+            else -> demanderPermissionCamera()
         }
+    }
+
+    private fun devraitAfficherExplicationPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                shouldShowRequestPermissionRationale(permission)
+            } else {
+                false
+            }
+    }
+
+    private fun demanderPermissionCamera() {
+        ActivityCompat.requestPermissions(this, arrayOf(permission),  REQUEST_PERMISSION_CODE)
     }
 
     private fun initialiserScan() {
@@ -155,7 +175,7 @@ class MainActivity : AppCompatActivity() {
             .setTitle(R.string.demander_camera)
             .setMessage(R.string.explication_permission)
             .setPositiveButton(R.string.ok) { dialog, id ->
-                requestPermissions(arrayOf(permission), REQUEST_PERMISSION_CODE)
+                demanderPermissionCamera()
             }
             .setNegativeButton(R.string.annuler) { dialog, _ ->
                 dialog.dismiss()

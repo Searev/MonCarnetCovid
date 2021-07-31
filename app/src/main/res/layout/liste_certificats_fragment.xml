@@ -22,6 +22,7 @@
             android:src="@drawable/empty"
             android:layout_gravity="center"
             android:layout_margin="24dp"
+            tools:visibility="visible"
             android:visibility="@{vm.codePresent ? View.GONE : View.VISIBLE}"
             android:importantForAccessibility="no"/>
 
@@ -32,16 +33,30 @@
             android:textAlignment="center"
             android:visibility="@{vm.codePresent ? View.GONE : View.VISIBLE}"
             android:text="@string/aucun_certificat"
+            tools:visibility="visible"
             android:textAppearance="?attr/textAppearanceSubtitle1"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listeCertificats"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:padding="12dp"
-            android:clipToPadding="false"
-            tools:listitem="@layout/certificat_card_view"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{vm.codePresent ? View.VISIBLE : View.GONE}"
+                android:text="@string/mes_certificats"
+                android:layout_margin="@dimen/margin_24"
+                android:textAppearance="?attr/textAppearanceHeadline6"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listeCertificats"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:clipToPadding="false"
+                android:layout_marginHorizontal="@dimen/margin_12"
+                tools:listitem="@layout/certificat_card_view"/>
+        </LinearLayout>
 
     </LinearLayout>
 </layout>

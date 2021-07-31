@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">Mon Carnet Covid</string>
-    <string name="explication_permission_titre">
-        Demande d\'accès à la caméra
-    </string>
-    <string name="demander_camera">
-        Accès à la caméra
-    </string>
+
+    <!-- Accès à la caméra et persmissions -->
+    <string name="demander_camera">Accès à la caméra</string>
     <string name="explication_permission">
         Afin de scanner le QR Code contenant le certificat, Mon Carnet Covid doit pouvoir accéder à votre caméra
     </string>
@@ -40,10 +37,23 @@
 
     <!-- Gestion des certificats -->
     <string name="aucun_certificat">Vous n\'avez aucun certificat sur votre application</string>
+    <string name="mes_certificats">Mes certificats</string>
     <string name="afficher_code">Afficher le code</string>
     <string name="precedent">Revenir à la liste</string>
-    <string name="certificat_test">Certificat de test</string>
-    <string name="attestation_vaccination">Attestation de vaccination</string>
+    <string name="test">Certificat de test</string>
+    <string name="test_positif">Test positif</string>
+    <string name="test_negatif">Test négatif</string>
+    <string name="vaccination">Vaccination</string>
+    <string name="attestation_test">Attestation de test</string>
+    <string name="certificat_vaccination">Certificat de vaccination</string>
+    <string name="attestation_retablissement">Attestation de rétablissement</string>
+    <string name="aggrandir_code">Appuyez sur le code pour l\'aggrandir</string>
+    <string name="retour_certificat">Revenir au certificat</string>
+    <string name="certificat_date_prelevement">Prélèvement réalisé le %s</string>
+    <string name="certificat_date_injection">Injection réalisée le %s</string>
+    <string name="certificat_date_validite">Valide à partir du %s</string>
+    <string name="detenteur">Détenteur/Détentrice</string>
+
     <string name="effacer_certificat">Supprimer le certificat</string>
     <string name="effacer_certificat_titre">Suppression d\'un certificat</string>
     <string name="effacer_certificat_confirmation">
@@ -54,9 +64,5 @@
     <string name="scan_instruction">Scannez le QR Code de votre certificat</string>
     <string name="scan_reussi">Certificat ajouté</string>
     <string name="scan_echec">Le code scanné ne contient pas de certificat valide</string>
-
-    <!-- Ressources utiles pour la navigation -->
-    <string name="first_fragment_label">Mon pass sanitaire</string>
-    <string name="second_fragment_label">Partage d\'un certificat</string>
 
 </resources>

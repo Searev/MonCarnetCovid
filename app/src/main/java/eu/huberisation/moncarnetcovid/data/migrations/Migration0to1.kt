@@ -1,4 +1,10 @@
 package eu.huberisation.moncarnetcovid.data.migrations
 
-object Migration_0_to_1 {
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+
+object Migration0to1: Migration(0, 1) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("CREATE TABLE IF NOT EXISTS `Certificat` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `contenu` TEXT NOT NULL)")
+    }
 }

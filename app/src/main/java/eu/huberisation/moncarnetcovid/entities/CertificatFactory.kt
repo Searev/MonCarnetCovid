@@ -1,4 +1,11 @@
 package eu.huberisation.moncarnetcovid.entities
 
-class CertificatFactory {
+object CertificatFactory {
+    fun creerCertificatDepuisCode(code: String, id: Long? = null): Certificat {
+        return when {
+            CertificatVaccination.correspond(code) -> CertificatVaccination(code, id)
+            CertificatTest.correspond(code) -> CertificatTest(code, id)
+            else -> CertificatEuropeen(code, id)
+        }
+    }
 }

@@ -2,6 +2,7 @@ package eu.huberisation.moncarnetcovid.ui.onboarding
 
 import android.content.Intent
 import eu.huberisation.moncarnetcovid.R
+import eu.huberisation.moncarnetcovid.helper.SharedPrefsHelper
 import eu.huberisation.moncarnetcovid.ui.MainActivity
 
 
@@ -12,6 +13,7 @@ class OnboardingPrivacyFragment: OnboardingFragment() {
     override fun getImageKey() = R.drawable.secure_data
 
     override fun onBtnClick() {
+        SharedPrefsHelper.setOnboardingDone(requireContext())
         val intent = Intent(requireContext(), MainActivity::class.java)
         startActivity(intent)
     }

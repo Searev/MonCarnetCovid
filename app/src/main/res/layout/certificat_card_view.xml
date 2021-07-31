@@ -5,49 +5,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/margin_24">
+    android:layout_margin="@dimen/margin_12">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_24">
+        android:layout_margin="@dimen/margin_8">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_qr_code_scanner_24"
+            android:id="@+id/certificatImg"
+            android:layout_width="@dimen/icon_size_lg"
+            android:layout_height="@dimen/icon_size_lg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/icon_vaccin"
+            android:scaleType="fitCenter"
             android:importantForAccessibility="no"
-            android:layout_gravity="center"
-            app:tint="@color/blue_700" />
-
-        <TextView
-            android:id="@+id/certificatType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Certificat de vaccination"
-            android:layout_marginTop="@dimen/margin_24"
-            android:textAlignment="center"
-            android:textAppearance="?attr/textAppearanceHeadline6" />
+            android:layout_margin="@dimen/margin_16" />
 
         <TextView
             android:id="@+id/certificatDetenteur"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+            app:layout_constraintTop_toTopOf="@id/certificatImg"
+            app:layout_constraintBottom_toTopOf="@id/certificatType"
+            app:layout_constraintStart_toEndOf="@id/certificatImg"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/margin_12"
+            tools:text="Jean Dupond René Dumont"
+            android:textAppearance="?attr/textAppearanceBody1" />
+
+        <TextView
+            android:id="@+id/certificatType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/certificatDetenteur"
+            app:layout_constraintBottom_toBottomOf="@id/certificatImg"
+            app:layout_constraintStart_toEndOf="@id/certificatImg"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
+            android:layout_marginStart="@dimen/margin_12"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="@string/vaccination" />
+
+        <TextView
+            android:id="@+id/certificatDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/certificatImg"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="@dimen/margin_16"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
             android:textAlignment="center"
             android:layout_marginTop="@dimen/margin_12"
             android:visibility="gone"
-            tools:text="Jean Dupont" />
+            tools:visibility="visible"
+            tools:text="@string/certificat_date_injection" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/afficherCodeBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_24"
-            android:layout_gravity="center"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:text="@string/afficher_code" />
+            app:layout_constraintTop_toBottomOf="@id/certificatDate"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_12"
+            android:layout_marginStart="@dimen/margin_8"
+            android:text="@string/afficher_code"
+            style="?attr/borderlessButtonStyle" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>

@@ -1,4 +1,8 @@
-package eu.huberisation.moncarnetcovid.ui
+package eu.huberisation.moncarnetcovid.viewmodel
 
-class MainActivityViewModel {
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+
+class MainActivityViewModel: ViewModel() {
+    val showFabBtn = MutableLiveData(true)
 }

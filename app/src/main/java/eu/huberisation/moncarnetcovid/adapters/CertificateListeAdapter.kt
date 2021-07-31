@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import eu.huberisation.moncarnetcovid.R
 import eu.huberisation.moncarnetcovid.ui.CertificatView
-import eu.huberisation.moncarnetcovid.model.Certificat
-import eu.huberisation.moncarnetcovid.model.TypeCertificat
+import eu.huberisation.moncarnetcovid.entities.Certificat
+import eu.huberisation.moncarnetcovid.entities.TypeCertificat
 
 class CertificateListeAdapter(private val onCLickListener: OnCertificateClickListener): ListAdapter<Certificat, CertificateListeAdapter.CertificateViewHolder>(CertificateComparator()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CertificateListeAdapter.CertificateViewHolder {
@@ -23,7 +23,7 @@ class CertificateListeAdapter(private val onCLickListener: OnCertificateClickLis
     }
 
     override fun onBindViewHolder(
-        holder: CertificateListeAdapter.CertificateViewHolder,
+        holder: CertificateViewHolder,
         position: Int
     ) {
         val current = getItem(position)
@@ -33,14 +33,7 @@ class CertificateListeAdapter(private val onCLickListener: OnCertificateClickLis
     class CertificateViewHolder(itemView: CertificatView): RecyclerView.ViewHolder(itemView) {
         fun bind(certificat: Certificat, clickListener: OnCertificateClickListener) {
             itemView as CertificatView
-            val typeString = when (certificat.type) {
-                TypeCertificat.SANITAIRE -> R.string.certificat_test
-                TypeCertificat.VACCINATION -> R.string.attestation_vaccination
-            }
-            itemView.setType(typeString)
-            certificat.detenteur?.let {
-                itemView.setDetenteur(it)
-            }
+            itemView.setCertificat(certificat)
             itemView.setBtnClickListener {
                 clickListener.onCertificateClick(certificat)
             }
@@ -56,7 +49,7 @@ class CertificateListeAdapter(private val onCLickListener: OnCertificateClickLis
         }
 
         override fun areContentsTheSame(oldItem: Certificat, newItem: Certificat): Boolean {
-            return oldItem.contenu == newItem.contenu
+            return oldItem.code == newItem.code
         }
 
     }

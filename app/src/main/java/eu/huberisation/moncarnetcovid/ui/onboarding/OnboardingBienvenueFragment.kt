@@ -2,7 +2,6 @@ package eu.huberisation.moncarnetcovid.ui.onboarding
 
 import androidx.navigation.fragment.findNavController
 import eu.huberisation.moncarnetcovid.R
-import eu.huberisation.moncarnetcovid.helper.SharedPrefsHelper
 
 
 class OnboardingBienvenueFragment: OnboardingFragment() {
@@ -12,7 +11,6 @@ class OnboardingBienvenueFragment: OnboardingFragment() {
     override fun getImageKey() = R.drawable.covid_19_precautions
 
     override fun onBtnClick() {
-        SharedPrefsHelper.setOnboardingDone(requireContext())
         val action = OnboardingBienvenueFragmentDirections.actionOnboardingBienvenueFragmentToOnboardingFonctionnementFragment()
         findNavController().navigate(action)
     }

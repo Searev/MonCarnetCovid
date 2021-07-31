@@ -1,6 +1,35 @@
 package eu.huberisation.moncarnetcovid.entities
 
-class AttestationVaccination: AbstractCertificat() {
+import eu.huberisation.moncarnetcovid.exceptions.CertificatInvalideException
+import java.text.SimpleDateFormat
+import java.util.*
+
+class CertificatVaccination(code: String, id: Long? = null): Certificat(code, id) {
+    override val type = TypeCertificat.VACCINATION
+    override val europeen = false
+    override val detenteur: String
+    override val dateEmission: Date?
+
+    init {
+        val resultats = validationRegex.find(code) ?: throw CertificatInvalideException()
+
+        val prenom = resultats.groups[CertificatVaccinationChamps.PRENOM.index]?.value?.replace("/", ", ") ?: ""
+        val nom = resultats.groups[CertificatVaccinationChamps.NOM.index]?.value ?: ""
+        detenteur = "$prenom $nom"
+
+        dateEmission = resultats.groups[CertificatVaccinationChamps.DATE_DERNIERE_DOSE.index]
+            ?.value
+            ?.let {
+                SimpleDateFormat("ddMMyyyy", Locale.FRANCE).parse(it)
+            }
+    }
+
+    enum class CertificatVaccinationChamps(val code: String, val index: Int) {
+        NOM("L0", 3),
+        PRENOM("L1", 4),
+        DATE_DERNIERE_DOSE("L9", 12),
+    }
+
     companion object {
         private val validationRegex: Regex = "^[A-Z\\d]{4}" // Characters 0 to 3 are ignored. They represent the document format version.
             .plus("([A-Z\\d]{4})") // 1 - Characters 4 to 7 represent the document signing authority.
@@ -22,14 +51,6 @@ class AttestationVaccination: AbstractCertificat() {
             .plus("LA([A-Z\\d]{2})") // 13 - We capture the field LA. 2 characters letters or digits
             .plus("\\x1F{1}") // This character is separating the message from its signature.
             .plus("([A-Z\\d\\=]+)$").toRegex() // 14 - This is the message signature.
-
-        val headerDetectionRegex: Regex = "^[A-Z\\d]{4}" // Characters 0 to 3 are ignored.
-            // They represent the document format version.
-            .plus("([A-Z\\d]{4})") // 1 - Characters 4 to 7 represent the document signing authority.
-            .plus("([A-Z\\d]{4})") // 2 - Characters 8 to 11 represent the id of the certificate used to sign the document.
-            .plus("[A-Z\\d]{8}") // Characters 12 to 19 are ignored.
-            .plus("L1") // Characters 20 and 21 represent the wallet certificate type (sanitary, ...)
-            .toRegex()
 
         fun correspond(code: String) = validationRegex.matches(code)
     }

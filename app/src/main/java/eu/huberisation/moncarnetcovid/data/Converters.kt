@@ -1,7 +1,7 @@
 package eu.huberisation.moncarnetcovid.data
 
 import androidx.room.TypeConverter
-import eu.huberisation.moncarnetcovid.model.TypeCertificat
+import eu.huberisation.moncarnetcovid.entities.TypeCertificat
 import java.util.*
 
 class Converters {

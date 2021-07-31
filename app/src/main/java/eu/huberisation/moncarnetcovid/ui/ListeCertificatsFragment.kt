@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -13,9 +14,10 @@ import eu.huberisation.moncarnetcovid.R
 import eu.huberisation.moncarnetcovid.adapters.CertificateListeAdapter
 import eu.huberisation.moncarnetcovid.adapters.OnCertificateClickListener
 import eu.huberisation.moncarnetcovid.databinding.ListeCertificatsFragmentBinding
-import eu.huberisation.moncarnetcovid.model.Certificat
+import eu.huberisation.moncarnetcovid.entities.Certificat
 import eu.huberisation.moncarnetcovid.viewmodel.ListeCertificatsViewModel
 import eu.huberisation.moncarnetcovid.viewmodel.ListeCertificatsViewModelFactory
+import eu.huberisation.moncarnetcovid.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.launch
 
 
@@ -26,6 +28,7 @@ class ListeCertificatsFragment : Fragment(), OnCertificateClickListener  {
     private val viewModel: ListeCertificatsViewModel by viewModels {
         ListeCertificatsViewModelFactory((requireActivity().application as MonCarnetCovidApplication).certificatRepository)
     }
+    private val activityViewModel: MainActivityViewModel by activityViewModels()
     private var certificatSelectionne: Certificat? = null
 
     override fun onCreateView(
@@ -41,6 +44,8 @@ class ListeCertificatsFragment : Fragment(), OnCertificateClickListener  {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
         registerForContextMenu(recyclerView)
+
+        activityViewModel.showFabBtn.postValue(true)
 
         return binding.root
     }

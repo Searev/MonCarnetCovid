@@ -4,10 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import eu.huberisation.moncarnetcovid.model.Certificat
+import eu.huberisation.moncarnetcovid.data.migrations.Migration0to1
+import eu.huberisation.moncarnetcovid.data.model.CertificatDto
 
 @Database(
-    entities = [Certificat::class],
+    entities = [CertificatDto::class],
     version = 1
 )
 abstract class AppDatabase: RoomDatabase() {
@@ -25,6 +26,7 @@ abstract class AppDatabase: RoomDatabase() {
 
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+                .addMigrations(Migration0to1)
                 .build()
         }
     }
