@@ -6,11 +6,13 @@ et ce projet adhère aux principes du [Versioning Sémantique](https://semver.or
 
 ## [Unreleased]
 
-## [1.0.0] - 26/07/2021
+## [1.0.0] - 01/08/2021
 ### Ajoutés
-- Précise le fonctionnement de l'application à son premier lancement
+- Préciser le fonctionnement de l'application à son premier lancement
 - Scanner une attestation de vaccination française destinée à TousAntiCovid
 - Scanner un certificat de test au format européen
-- Affiche le nom et prénom des attestations de vaccination
+- Afficher le nom et prénom des attestations de vaccination
 - Afficher sous forme de QR Code ou DataMatrix les certificats
-- Gère de multiples certificats
+- Gèrer de multiples certificats
+- Afficher les dates de dernière injection ou de prélèvement
+- Afficher en plein écran les codes QR et Datamatrix
