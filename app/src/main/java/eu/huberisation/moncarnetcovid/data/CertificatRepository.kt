@@ -1,6 +1,6 @@
 package eu.huberisation.moncarnetcovid.data
 
-import eu.huberisation.moncarnetcovid.data.model.CertificatDto
+import eu.huberisation.moncarnetcovid.data.model.CertificatDbEntity
 import eu.huberisation.moncarnetcovid.entities.Certificat
 import eu.huberisation.moncarnetcovid.entities.CertificatFactory
 import kotlinx.coroutines.flow.map
@@ -24,7 +24,7 @@ class CertificatRepository(private val certificatDao: CertificatDao) {
     suspend fun creerCertificat(
         certificat: Certificat,
     ) {
-        val certificatDto = CertificatDto(certificat.code)
+        val certificatDto = CertificatDbEntity(certificat.code)
         return certificatDao.insert(certificatDto)
     }
 }

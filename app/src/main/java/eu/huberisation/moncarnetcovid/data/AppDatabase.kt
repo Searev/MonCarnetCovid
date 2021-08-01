@@ -5,11 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import eu.huberisation.moncarnetcovid.data.migrations.Migration0to1
-import eu.huberisation.moncarnetcovid.data.model.CertificatDto
+import eu.huberisation.moncarnetcovid.data.model.CertificatDbEntity
 
 @Database(
-    entities = [CertificatDto::class],
-    version = 1
+    entities = [CertificatDbEntity::class],
+    version = 1,
+    exportSchema = true
 )
 abstract class AppDatabase: RoomDatabase() {
     abstract fun certificatDao(): CertificatDao
