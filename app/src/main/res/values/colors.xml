@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="blue_200">#FF6A89CC</color>
-    <color name="blue_500">#FF4A69BD</color>
-    <color name="blue_700">#FF1E3799</color>
-    <color name="blue_900">#FF0C2461</color>
+    <color name="bleu_clair">#FF8A9EF1</color>
+    <color name="bleu_median">#FF5770BE</color>
+    <color name="bleu_sombre">#FF1F458D</color>
+    <color name="bleu_sombre_desature">#FF484D7A</color>
 
-    <color name="red_200">#FFE55039</color>
-    <color name="red_700">#FFB71540</color>
+    <color name="pourpre_clair">#FFED9DB4</color>
+    <color name="pourpre_median">#FFDB566F</color>
+    <color name="pourpre_sombre">#FF9D465F</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

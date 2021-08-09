@@ -36,7 +36,11 @@
     <string name="onboarding_privacy_btn">J\’accepte ce traitement</string>
 
     <!-- Gestion des certificats -->
-    <string name="aucun_certificat">Vous n\'avez aucun certificat sur votre application</string>
+    <string name="import_premier_certificat">Importez votre premier certificat</string>
+    <string name="import_premier_certificat_desc">
+        Si vous disposez d\'un certificat COVID sur papier ou PDF et que vous souhaitez l\'ajouter
+        à l\'application, cliquez sur le bouton ci-dessous.
+    </string>
     <string name="mes_certificats">Mes certificats</string>
     <string name="afficher_code">Afficher le code</string>
     <string name="precedent">Revenir à la liste</string>
@@ -60,9 +64,40 @@
         Voulez-vous vraiment effacer ce certificat de l\'application ?
     </string>
 
-    <string name="ajouter_qr_code">Ajouter un QR Code</string>
+    <!-- Scan -->
+    <string name="ajouter_qr_code">Ajouter un certificat</string>
+    <string name="about_btn">A propos de Mon Carnet Covid</string>
     <string name="scan_instruction">Scannez le QR Code de votre certificat</string>
     <string name="scan_reussi">Certificat ajouté</string>
     <string name="scan_echec">Le code scanné ne contient pas de certificat valide</string>
 
+    <!-- A Propos -->
+    <string name="a_propos">A Propos</string>
+    <string name="auteur">
+        Conçu et développé par Bastien Huber.
+        \n\n
+        Le code source de cette application est Open Source et peut être trouvé sur github.
+    </string>
+    <string name="github_lien">Voir le code source</string>
+    <string name="gestion_donnees">Gestions des données</string>
+    <string name="gestion_donnees_desc">
+        Vos données sont stockées localement sur votre téléphone. Le QR Code ou 2D-Doc de partage
+        permet à un autre appareil de scanner les informations contenues dans votre certificat.
+    </string>
+    <string name="fonctionnement_app">Fonctionnement de l\'application</string>
+    <string name="fonctionnement_app_desc">
+        Pour ajouter un certificat COVID à l\'application, vous aurez besoin du certificat vous ayant
+        été remis après votre test, vaccination ou rétablissement. Scannez alors, depuis
+        l\'application, le code QR présent sur ce document et correspondant au certificat
+        Européen. Il apparaitra alors dans l\'application.
+        \n\n
+        Vous pouvez ajouter autant de certificats que vous le souhaitez.
+    </string>
+    <string name="qr_code">Code QR</string>
+    <string name="qr_code_fonctionnement">
+        Le code QR contient toutes les informations qui apparaissent sur votre certificat papier :
+        données d\'état civil du détenteur ou de la détentrice, données médicales du test, de la
+        vaccination… auquel est ajouté une signature permettant d\'attester de l\'authenticité du
+        document
+    </string>
 </resources>

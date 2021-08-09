@@ -4,5 +4,4 @@ import eu.huberisation.moncarnetcovid.entities.Certificat
 
 interface OnCertificateClickListener {
     fun onCertificateClick(certificat: Certificat)
-    fun onCreateContextMenu(certificat: Certificat)
 }

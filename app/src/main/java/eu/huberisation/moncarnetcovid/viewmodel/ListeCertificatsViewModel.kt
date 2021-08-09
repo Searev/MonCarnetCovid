@@ -8,8 +8,6 @@ class ListeCertificatsViewModel(private val certificatRepository: CertificatRepo
         .recupererCertificats()
         .asLiveData()
 
-    val codePresent: LiveData<Boolean> = Transformations
-        .map(certificats) {
-            it.isNotEmpty()
-        }
+    val aucunCode: LiveData<Boolean> = Transformations
+        .map(certificats) { it.isEmpty() }
 }

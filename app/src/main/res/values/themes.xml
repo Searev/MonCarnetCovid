@@ -2,12 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.MonCarnetCovid" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue_500</item>
-        <item name="colorPrimaryVariant">@color/blue_700</item>
+        <item name="colorPrimary">@color/bleu_median</item>
+        <item name="colorPrimaryVariant">@color/bleu_sombre</item>
+        <item name="colorPrimaryDark">@color/bleu_sombre</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/red_200</item>
-        <item name="colorSecondaryVariant">@color/red_700</item>
+        <item name="colorSecondary">@color/pourpre_median</item>
+        <item name="colorSecondaryVariant">@color/pourpre_sombre</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>

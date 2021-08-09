@@ -8,6 +8,7 @@ import android.util.DisplayMetrics
 import android.view.*
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.activityViewModels
@@ -21,14 +22,13 @@ import eu.huberisation.moncarnetcovid.R
 import eu.huberisation.moncarnetcovid.databinding.DetailCertificatFragmentBinding
 import eu.huberisation.moncarnetcovid.entities.Certificat
 import eu.huberisation.moncarnetcovid.entities.TypeCertificat
-import eu.huberisation.moncarnetcovid.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.launch
 
 
 class DetailCertificatFragment : Fragment() {
 
     private lateinit var binding: DetailCertificatFragmentBinding
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
+    private lateinit var certificat: Certificat
     private val barcodeEncoder = BarcodeEncoder()
     private val args: DetailCertificatFragmentArgs by navArgs()
     private val qrCodeSize by lazy {
@@ -40,23 +40,34 @@ class DetailCertificatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DetailCertificatFragmentBinding.inflate(inflater, container, false)
-        activityViewModel.showFabBtn.postValue(false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.detailCertificatBackBtn.setOnClickListener {
-            findNavController().popBackStack()
+        binding.detailCertificatTitreAppBar.apply {
+            setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
+
+            setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_supprimer -> {
+                        confirmerSuppression()
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
 
         lifecycleScope.launch {
-            val certificat = (requireActivity().application as MonCarnetCovidApplication)
+            certificat = (requireActivity().application as MonCarnetCovidApplication)
                 .certificatRepository
                 .recupererCertificat(args.idCertificat)
 
-            binding.detailCertificatTitre.text = getString(
+            binding.detailCertificatTitreAppBar.title = getString(
                 when (certificat.type) {
                     TypeCertificat.VACCINATION -> R.string.certificat_vaccination
                     TypeCertificat.TEST -> R.string.attestation_test
@@ -64,11 +75,9 @@ class DetailCertificatFragment : Fragment() {
                 }
             )
 
-            binding.barcodeImageView.setImageBitmap(
-                genererCodeBitmap(certificat.code, certificat.getBarcodeFormat(), qrCodeSize)
-            )
-            binding.barcodeImageView.setOnClickListener {
-                aggrandirImage(certificat)
+            binding.barcodeImageView.apply {
+                setImageBitmap(genererCodeBitmap(certificat.code, certificat.getBarcodeFormat(), qrCodeSize))
+                setOnClickListener { aggrandirImage(certificat) }
             }
 
             certificat.detenteur.let {
@@ -77,37 +86,6 @@ class DetailCertificatFragment : Fragment() {
                     visibility = View.VISIBLE
                 }
             }
-        }
-    }
-
-    /**
-     * Gestion de la luminosité pour cet écran.
-     * Lorsque ce fragment apparaît, forcer la luminosité à passer au maximum.
-     * Lorsqu'il disparait, faire en sorte que les paramètres par défaut s'appliquent à nouveau.
-     */
-    override fun onResume() {
-        super.onResume()
-        activity?.let { activity ->
-            val windowInsetsController = WindowInsetsControllerCompat(activity.window, activity.window.decorView)
-            val isAppearanceLightStatusBars = windowInsetsController.isAppearanceLightStatusBars
-            activity.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            val params: WindowManager.LayoutParams? = activity.window?.attributes
-            params?.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL
-            activity.window?.attributes = params // this call make the status bars loose its appearance
-            windowInsetsController.isAppearanceLightStatusBars = isAppearanceLightStatusBars
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        activity?.let { activity ->
-            val windowInsetsController = WindowInsetsControllerCompat(activity.window, activity.window.decorView)
-            val isAppearanceLightStatusBars = windowInsetsController.isAppearanceLightStatusBars
-            activity.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            val params: WindowManager.LayoutParams? = activity.window?.attributes
-            params?.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
-            activity.window?.attributes = params // this call make the status bars loose its appearance
-            windowInsetsController.isAppearanceLightStatusBars = isAppearanceLightStatusBars
         }
     }
 
@@ -132,6 +110,8 @@ class DetailCertificatFragment : Fragment() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             ))
+            setOnShowListener { modifierLuminosite(true)  }
+            setOnDismissListener { modifierLuminosite(false) }
         }
         dialog.show()
     }
@@ -143,5 +123,46 @@ class DetailCertificatFragment : Fragment() {
             size,
             size
         )
+    }
+
+    private fun confirmerSuppression() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.effacer_certificat_titre)
+            .setMessage(R.string.effacer_certificat_confirmation)
+            .setPositiveButton(R.string.effacer_certificat) { dialog, id ->
+                supprimerCertificat()
+            }
+            .setNegativeButton(R.string.annuler) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    private fun supprimerCertificat() {
+        lifecycleScope.launch {
+            (requireActivity().application as MonCarnetCovidApplication).certificatRepository
+                .supprimerCertificat(certificat)
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun modifierLuminosite(activer: Boolean) {
+        activity?.let { activity ->
+            val windowInsetsController = WindowInsetsControllerCompat(activity.window, activity.window.decorView)
+            val isAppearanceLightStatusBars = windowInsetsController.isAppearanceLightStatusBars
+            val params: WindowManager.LayoutParams? = activity.window?.attributes
+
+            if (activer) {
+                activity.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                params?.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL
+            } else {
+                activity.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                params?.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+            }
+
+            activity.window?.attributes = params // this call make the status bars loose its appearance
+            windowInsetsController.isAppearanceLightStatusBars = isAppearanceLightStatusBars
+        }
     }
 }
