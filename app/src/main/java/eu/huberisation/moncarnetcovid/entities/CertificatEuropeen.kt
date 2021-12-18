@@ -1,31 +1,33 @@
 package eu.huberisation.moncarnetcovid.entities
 
-import eu.huberisation.moncarnetcovid.decoder.Base45Decoder
-import eu.huberisation.moncarnetcovid.decoder.CborDecoder
-import eu.huberisation.moncarnetcovid.decoder.CompressorDecoder
-import eu.huberisation.moncarnetcovid.decoder.CoseDecoder
+import eu.huberisation.moncarnetcovid.dcc_decoder.Base45Decoder
+import eu.huberisation.moncarnetcovid.dcc_decoder.CborDecoder
+import eu.huberisation.moncarnetcovid.dcc_decoder.CompressorDecoder
+import eu.huberisation.moncarnetcovid.dcc_decoder.CoseDecoder
 import eu.huberisation.moncarnetcovid.exceptions.CertificatInvalideException
-import java.util.*
+import java.io.Serializable
 
 @OptIn(ExperimentalUnsignedTypes::class)
-class CertificatEuropeen(code: String, id: Long? = null): Certificat(code, id) {
+class CertificatEuropeen(code: String, id: Long? = null): Certificat(code, id), Serializable {
     override val type: TypeCertificat
     override val europeen = true
-    override val detenteur: String
-    override val dateEmission: Date?
-    val resultatTest: Boolean?
+    override val detenteur: Detenteur
+    override val test: Test?
+    override val vaccination: Vaccination?
+    override val retablissement: Retablissement?
 
     init {
         val codeSansPrefix = retirerPefixe()
         val base45Decoded = Base45Decoder.decode(codeSansPrefix)
         val cose = CompressorDecoder.decode(base45Decoded)
         val coseData = CoseDecoder.decode(cose)
-        val certData = coseData?.let { CborDecoder.decode(it.cbor) } ?: throw CertificatInvalideException()
+        val greensCertificate = coseData?.let { CborDecoder.decode(it.cbor) } ?: throw CertificatInvalideException()
 
-        detenteur = certData.let { "${it.prenom} ${it.nom}" } ?: ""
-        type = certData.type
-        dateEmission = certData.date
-        resultatTest = if (type === TypeCertificat.TEST) certData.resultat else null
+        detenteur = greensCertificate.detenteur
+        type = greensCertificate.type
+        test = greensCertificate.test
+        vaccination = greensCertificate.vaccination
+        retablissement = greensCertificate.retablissement
     }
 
     private fun retirerPefixe(): String {

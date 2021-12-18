@@ -9,8 +9,7 @@ import eu.huberisation.moncarnetcovid.data.model.CertificatDbEntity
 
 @Database(
     entities = [CertificatDbEntity::class],
-    version = 1,
-    exportSchema = true
+    version = 1
 )
 abstract class AppDatabase: RoomDatabase() {
     abstract fun certificatDao(): CertificatDao
@@ -31,5 +30,4 @@ abstract class AppDatabase: RoomDatabase() {
                 .build()
         }
     }
-
 }

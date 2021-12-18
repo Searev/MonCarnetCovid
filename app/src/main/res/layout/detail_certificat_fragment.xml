@@ -1,85 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="vm"
+            type="eu.huberisation.moncarnetcovid.viewmodel.DetailCertificatViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/detailCertificatTitreAppBar"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            tools:title="@string/certificat_vaccination"
-            app:menu="@menu/menu_certificat"
-            app:navigationIcon="@drawable/ic_baseline_clear_24"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface" />
+            android:layout_height="wrap_content">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/detailCertificatTitreAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                tools:title="@string/certificat_vaccination"
+                app:menu="@menu/menu_certificat"
+                app:navigationIcon="@drawable/ic_baseline_clear_24"
+                style="@style/Widget.MaterialComponents.Toolbar.Surface" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".ui.DetailCertificatFragment">
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <ImageView
-            android:id="@+id/barcodeImageView"
-            android:layout_width="@dimen/qr_code_fullscreen_size"
-            android:layout_height="@dimen/qr_code_fullscreen_size"
-            android:layout_margin="16dp"
-            android:layout_marginTop="16dp"
-            android:adjustViewBounds="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription"
-            tools:src="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/barcodeImageAggrandirTxt"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_12"
-            app:layout_constraintTop_toBottomOf="@id/barcodeImageView"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/aggrandir_code"
-            android:textAlignment="center" />
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="@dimen/margin_24"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintTop_toBottomOf="@id/barcodeImageAggrandirTxt"/>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:scrollbars="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/toggleDetails"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.0">
 
-        <TextView
-            android:id="@+id/barcodeDetenteurLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_24"
-            android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="?android:attr/textColorSecondary"
-            android:text="@string/detenteur"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/margin_24"
+                    android:orientation="vertical"
+                    tools:context=".ui.DetailCertificatFragment">
 
-        <TextView
-            android:id="@+id/barcodeDetenteur"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/barcodeDetenteurLabel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textAppearance="?attr/textAppearanceBody1"
-            tools:text="Jean Dupont" />
+                    <ImageView
+                        android:id="@+id/barcodeImageView"
+                        android:layout_width="@dimen/qr_code_fullscreen_size"
+                        android:layout_height="@dimen/qr_code_fullscreen_size"
+                        android:layout_gravity="center"
+                        android:layout_margin="16dp"
+                        android:adjustViewBounds="true"
+                        tools:ignore="ContentDescription"
+                        tools:src="@tools:sample/avatars" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/barcodeImageAggrandirTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_12"
+                        android:text="@string/aggrandir_code"
+                        android:textAlignment="center" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="@dimen/margin_24"
+                        android:background="?android:attr/listDivider" />
+
+                    <TextView
+                        android:id="@+id/barcodeDetenteurLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/detenteur"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:attr/textColorSecondary" />
+
+                    <TextView
+                        android:id="@+id/barcodeDetenteur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@{vm.certificat.detenteur.nom}"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        tools:text="Jean Dupont" />
+
+                    <TextView
+                        android:id="@+id/barcodeDateNaissanceLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/margin_24"
+                        android:text="@string/date_naissance"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:attr/textColorSecondary" />
+
+                    <TextView
+                        android:id="@+id/barcodeDateNaissance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@{vm.certificat.detenteur.dateNaissance}"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        tools:text="01/01/1990" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/margin_24"
+                        android:visibility="@{vm.afficherDetailsVaccin ? View.VISIBLE : View.GONE}">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="@dimen/margin_24"
+                            android:background="?android:attr/listDivider" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/type_vaccin" />
+
+                        <TextView
+                            android:id="@+id/typeVaccin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textAlignment="center"
+                            android:text='@{vm.certificat.vaccination != null ? vm.certificat.vaccination.nomVaccin : ""}'
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            tools:text="Corminaty - Pfizer BioNTech" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/margin_24"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/date_injection" />
+
+                        <TextView
+                            android:id="@+id/dateInjection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@{vm.certificat.vaccination.dateFormatee}"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            tools:text="21/07/2020" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/margin_24"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/nb_doses" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:chipBackgroundColor="@{vm.certificat.vaccination.parcoursVaccinalTermine ? @color/bleu_clair : @color/pourpre_clair}"
+                            android:text="@{vm.certificat.vaccination.ratioDoses}"
+                            tools:text="2/2"
+                            android:textColor="@color/black"
+                            tools:chipBackgroundColor="@color/bleu_clair"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="@{vm.afficherDetailsTest ? View.VISIBLE : View.GONE}">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="@dimen/margin_24"
+                            android:background="?android:attr/listDivider" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/date_prelevement" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@{vm.certificat.test.datePrelevement}"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            tools:text="21/07/2020 à 17:02" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/margin_24"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/test_resultat" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:chipBackgroundColor="@{vm.certificat.test.resultat ? @color/pourpre_clair : @color/bleu_clair}"
+                            android:text="@{vm.certificat.test.resultat ? @string/test_positif : @string/test_negatif}"
+                            tools:text="Test négatif"
+                            android:textColor="@color/black"
+                            tools:chipBackgroundColor="@color/bleu_clair"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/toggleDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/toggleDetailsBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_24"
+                    tools:text="@string/afficher_details"
+                    android:text="@{vm.afficherDetails ? @string/masquer_details : @string/afficher_details}" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -6,15 +6,15 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,8 +29,8 @@ import eu.huberisation.moncarnetcovid.entities.Certificat
 import eu.huberisation.moncarnetcovid.entities.CertificatEuropeen
 import eu.huberisation.moncarnetcovid.entities.CertificatFactory
 import eu.huberisation.moncarnetcovid.exceptions.CertificatInvalideException
+import eu.huberisation.moncarnetcovid.viewmodel.CertificatViewModelFactory
 import eu.huberisation.moncarnetcovid.viewmodel.ListeCertificatsViewModel
-import eu.huberisation.moncarnetcovid.viewmodel.ListeCertificatsViewModelFactory
 import kotlinx.coroutines.launch
 
 
@@ -49,7 +49,7 @@ class ListeCertificatsFragment : Fragment(), OnCertificateClickListener  {
 
     private val permission = Manifest.permission.CAMERA
     private val viewModel: ListeCertificatsViewModel by viewModels {
-        ListeCertificatsViewModelFactory((requireActivity().application as MonCarnetCovidApplication).certificatRepository)
+        CertificatViewModelFactory((requireActivity().application as MonCarnetCovidApplication).certificatRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

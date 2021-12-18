@@ -20,7 +20,7 @@
  *  Created by Mykhailo Nester on 4/23/21 9:50 AM
  */
 
-package eu.huberisation.moncarnetcovid.decoder
+package eu.huberisation.moncarnetcovid.dcc_decoder
 
 import java.math.BigInteger
 

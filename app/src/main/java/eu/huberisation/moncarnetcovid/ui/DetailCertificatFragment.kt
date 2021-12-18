@@ -1,7 +1,6 @@
 package eu.huberisation.moncarnetcovid.ui
 
 import android.app.Dialog
-import android.graphics.Bitmap
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -9,27 +8,28 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.zxing.BarcodeFormat
-import com.journeyapps.barcodescanner.BarcodeEncoder
 import eu.huberisation.moncarnetcovid.MonCarnetCovidApplication
 import eu.huberisation.moncarnetcovid.R
 import eu.huberisation.moncarnetcovid.databinding.DetailCertificatFragmentBinding
 import eu.huberisation.moncarnetcovid.entities.Certificat
 import eu.huberisation.moncarnetcovid.entities.TypeCertificat
+import eu.huberisation.moncarnetcovid.helper.BarcodeHelper
+import eu.huberisation.moncarnetcovid.viewmodel.CertificatViewModelFactory
+import eu.huberisation.moncarnetcovid.viewmodel.DetailCertificatViewModel
 import kotlinx.coroutines.launch
 
 
 class DetailCertificatFragment : Fragment() {
-
     private lateinit var binding: DetailCertificatFragmentBinding
-    private lateinit var certificat: Certificat
-    private val barcodeEncoder = BarcodeEncoder()
+    private val viewModel: DetailCertificatViewModel by viewModels {
+        CertificatViewModelFactory((requireActivity().application as MonCarnetCovidApplication).certificatRepository)
+    }
     private val args: DetailCertificatFragmentArgs by navArgs()
     private val qrCodeSize by lazy {
         requireContext().resources.getDimension(R.dimen.qr_code_fullscreen_size).toInt()
@@ -40,6 +40,8 @@ class DetailCertificatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DetailCertificatFragmentBinding.inflate(inflater, container, false)
+        binding.vm = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -62,30 +64,10 @@ class DetailCertificatFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
-            certificat = (requireActivity().application as MonCarnetCovidApplication)
-                .certificatRepository
-                .recupererCertificat(args.idCertificat)
-
-            binding.detailCertificatTitreAppBar.title = getString(
-                when (certificat.type) {
-                    TypeCertificat.VACCINATION -> R.string.certificat_vaccination
-                    TypeCertificat.TEST -> R.string.attestation_test
-                    TypeCertificat.RETABLISSEMENT -> R.string.attestation_retablissement
-                }
-            )
-
-            binding.barcodeImageView.apply {
-                setImageBitmap(genererCodeBitmap(certificat.code, certificat.getBarcodeFormat(), qrCodeSize))
-                setOnClickListener { aggrandirImage(certificat) }
-            }
-
-            certificat.detenteur.let {
-                binding.barcodeDetenteur.apply {
-                    text = it
-                    visibility = View.VISIBLE
-                }
-            }
+        binding.toggleDetailsBtn.setOnClickListener { viewModel.toggleDetails() }
+        viewModel.setIdCertificat(args.idCertificat)
+        viewModel.certificat.observe(viewLifecycleOwner) { certificat ->
+            updateUI(certificat)
         }
     }
 
@@ -98,13 +80,8 @@ class DetailCertificatFragment : Fragment() {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
             val nextImageView = ImageView(context).apply {
-                setImageBitmap(
-                    genererCodeBitmap(
-                        certificat.code,
-                        certificat.getBarcodeFormat(),
-                        width
-                    )
-                )
+                val bitmap = BarcodeHelper.genererBitmap(certificat, width)
+                setImageBitmap(bitmap)
             }
             addContentView(nextImageView, RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -114,15 +91,6 @@ class DetailCertificatFragment : Fragment() {
             setOnDismissListener { modifierLuminosite(false) }
         }
         dialog.show()
-    }
-
-    private fun genererCodeBitmap(code: String, format: BarcodeFormat, size: Int): Bitmap? {
-        return barcodeEncoder.encodeBitmap(
-            code,
-            format,
-            size,
-            size
-        )
     }
 
     private fun confirmerSuppression() {
@@ -141,9 +109,12 @@ class DetailCertificatFragment : Fragment() {
 
     private fun supprimerCertificat() {
         lifecycleScope.launch {
-            (requireActivity().application as MonCarnetCovidApplication).certificatRepository
-                .supprimerCertificat(certificat)
-            findNavController().popBackStack()
+            viewModel.certificat.value?.let { certificat ->
+                (requireActivity().application as MonCarnetCovidApplication)
+                    .certificatRepository
+                    .supprimerCertificat(certificat)
+                findNavController().popBackStack()
+            }
         }
     }
 
@@ -163,6 +134,24 @@ class DetailCertificatFragment : Fragment() {
 
             activity.window?.attributes = params // this call make the status bars loose its appearance
             windowInsetsController.isAppearanceLightStatusBars = isAppearanceLightStatusBars
+        }
+    }
+
+    private fun updateUI(certificat: Certificat) {
+        binding.apply {
+            detailCertificatTitreAppBar.title = getString(
+                when (certificat.type) {
+                    TypeCertificat.VACCINATION -> R.string.certificat_vaccination
+                    TypeCertificat.TEST -> R.string.attestation_test
+                    TypeCertificat.RETABLISSEMENT -> R.string.attestation_retablissement
+                }
+            )
+
+            barcodeImageView.apply {
+                val bitmap = BarcodeHelper.genererBitmap(certificat, qrCodeSize)
+                setImageBitmap(bitmap)
+                setOnClickListener { aggrandirImage(certificat) }
+            }
         }
     }
 }

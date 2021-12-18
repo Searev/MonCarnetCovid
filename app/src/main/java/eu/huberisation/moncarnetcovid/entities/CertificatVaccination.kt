@@ -1,33 +1,50 @@
 package eu.huberisation.moncarnetcovid.entities
 
 import eu.huberisation.moncarnetcovid.exceptions.CertificatInvalideException
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CertificatVaccination(code: String, id: Long? = null): Certificat(code, id) {
+class CertificatVaccination(code: String, id: Long? = null): Certificat(code, id), Serializable {
     override val type = TypeCertificat.VACCINATION
     override val europeen = false
-    override val detenteur: String
-    override val dateEmission: Date?
+    override val detenteur: Detenteur
+    override val test: Test? = null
+    override val vaccination: Vaccination?
+    override val retablissement: Retablissement? = null
 
     init {
         val resultats = validationRegex.find(code) ?: throw CertificatInvalideException()
 
         val prenom = resultats.groups[CertificatVaccinationChamps.PRENOM.index]?.value?.replace("/", ", ") ?: ""
         val nom = resultats.groups[CertificatVaccinationChamps.NOM.index]?.value ?: ""
-        detenteur = "$prenom $nom"
+        detenteur = Detenteur(
+            "$prenom $nom",
+            resultats.groups[CertificatVaccinationChamps.DATE_DE_NAISSANCE.index]?.value ?: ""
+        )
 
-        dateEmission = resultats.groups[CertificatVaccinationChamps.DATE_DERNIERE_DOSE.index]
+        val dateEmission = resultats.groups[CertificatVaccinationChamps.DATE_DERNIERE_DOSE.index]
             ?.value
             ?.let {
                 SimpleDateFormat("ddMMyyyy", Locale.FRANCE).parse(it)
             }
+        vaccination = Vaccination(
+            dateEmission,
+            1,
+            1,
+            "",
+            ""
+        )
     }
 
     enum class CertificatVaccinationChamps(val code: String, val index: Int) {
         NOM("L0", 3),
         PRENOM("L1", 4),
+        DATE_DE_NAISSANCE("L2", 5),
+        NOM_VACCIN("L5", 8),
+        FABRIQUANT_VACCIN("L6", 9),
         DATE_DERNIERE_DOSE("L9", 12),
+
     }
 
     companion object {

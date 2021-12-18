@@ -45,6 +45,7 @@
     <string name="afficher_code">Afficher le code</string>
     <string name="precedent">Revenir à la liste</string>
     <string name="test">Certificat de test</string>
+    <string name="test_resultat">Résultat du test</string>
     <string name="test_positif">Test positif</string>
     <string name="test_negatif">Test négatif</string>
     <string name="vaccination">Vaccination</string>
@@ -57,6 +58,17 @@
     <string name="certificat_date_injection">Injection réalisée le %s</string>
     <string name="certificat_date_validite">Valide à partir du %s</string>
     <string name="detenteur">Détenteur/Détentrice</string>
+    <string name="date_naissance">Date de naissance</string>
+
+    <!-- Détail d'un certificat -->
+    <string name="afficher_details">Afficher plus de détails</string>
+    <string name="masquer_details">Masquer les détails</string>
+    <string name="type_vaccin">Vaccin administré</string>
+    <string name="type_test">Type de test</string>
+    <string name="date_injection">Date de dernière injection</string>
+    <string name="date_validite">Valide à partir du</string>
+    <string name="date_prelevement">Date du prélèvement</string>
+    <string name="nb_doses">Nombre de doses reçues</string>
 
     <string name="effacer_certificat">Supprimer le certificat</string>
     <string name="effacer_certificat_titre">Suppression d\'un certificat</string>

@@ -1,4 +1,4 @@
-package eu.huberisation.moncarnetcovid.decoder
+package eu.huberisation.moncarnetcovid.dcc_decoder
 
 import COSE.HeaderKeys
 import com.upokecenter.cbor.CBORObject

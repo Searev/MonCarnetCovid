@@ -3,6 +3,8 @@ package eu.huberisation.moncarnetcovid.data
 import eu.huberisation.moncarnetcovid.data.model.CertificatDbEntity
 import eu.huberisation.moncarnetcovid.entities.Certificat
 import eu.huberisation.moncarnetcovid.entities.CertificatFactory
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 
 class CertificatRepository(private val certificatDao: CertificatDao) {
@@ -12,9 +14,11 @@ class CertificatRepository(private val certificatDao: CertificatDao) {
         }
     }
 
-    suspend fun recupererCertificat(id: Long): Certificat {
-        val certificat = certificatDao.get(id)
-        return CertificatFactory.creerCertificatDepuisCode(certificat.code, id)
+    fun recupererCertificat(id: Long): Flow<Certificat> {
+        return certificatDao
+            .get(id)
+            .filterNotNull()
+            .map { CertificatFactory.creerCertificatDepuisCode(it.code, id) }
     }
 
     suspend fun supprimerCertificat(certificat: Certificat) {

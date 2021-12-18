@@ -2,27 +2,15 @@ package eu.huberisation.moncarnetcovid.ui
 
 
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
-import com.google.zxing.integration.android.IntentIntegrator
-import eu.huberisation.moncarnetcovid.MonCarnetCovidApplication
 import eu.huberisation.moncarnetcovid.R
 import eu.huberisation.moncarnetcovid.databinding.ActivityMainBinding
-import eu.huberisation.moncarnetcovid.entities.Certificat
-import eu.huberisation.moncarnetcovid.entities.CertificatEuropeen
-import eu.huberisation.moncarnetcovid.entities.CertificatFactory
-import eu.huberisation.moncarnetcovid.exceptions.CertificatInvalideException
 import eu.huberisation.moncarnetcovid.helper.SharedPrefsHelper
 import eu.huberisation.moncarnetcovid.ui.onboarding.OnboardingActivity
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 

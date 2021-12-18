@@ -1,33 +1,41 @@
 package eu.huberisation.moncarnetcovid.entities
 
 import eu.huberisation.moncarnetcovid.exceptions.CertificatInvalideException
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CertificatTest(code: String, id: Long?): Certificat(code, id) {
-    override val dateEmission: Date?
+class CertificatTest(code: String, id: Long?): Certificat(code, id), Serializable {
     override val type = TypeCertificat.TEST
     override val europeen = false
-    val resultatTest: String
-
-    override val detenteur: String
+    override val detenteur: Detenteur
+    override val test: Test?
+    override val vaccination: Vaccination? = null
+    override val retablissement: Retablissement? = null
 
     init {
         val resultats = validationRegex.find(code) ?: throw CertificatInvalideException()
 
         val nom = resultats.groups[INDEX_NOM]?.value?.replace("/", ", ") ?: ""
         val prenom = resultats.groups[INDEX_PRENOM]?.value ?: ""
-        detenteur = "$prenom $nom"
-        resultatTest = resultats.groups[INDEX_RESULTAT_TEST]?.value ?: ""
-        dateEmission = resultats.groups[INDEX_DATE_ANALYSE]?.value?.let {
+        detenteur = Detenteur(
+            "$prenom $nom",
+        resultats.groups[INDEX_DATE_DE_NAISSANCE]?.value ?: ""
+        )
+        val dateTest = resultats.groups[INDEX_DATE_ANALYSE]?.value?.let {
             SimpleDateFormat("ddMMyyyyHHmm", Locale.US).parse(it)
         }
 
+        test = Test(
+            dateTest,
+            resultats.groups[INDEX_RESULTAT_TEST]?.value == "NEGATIF"
+        )
     }
 
     companion object {
         private const val INDEX_PRENOM = 3
         private const val INDEX_NOM = 4
+        private const val INDEX_DATE_DE_NAISSANCE = 4
         private const val INDEX_RESULTAT_TEST = 8
         private const val INDEX_DATE_ANALYSE = 9
 
